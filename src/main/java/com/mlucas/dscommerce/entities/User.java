@@ -25,6 +25,7 @@ public class User {
 
   private String phone;
 
+  @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
   private LocalDate birthDate;
 
   private String password;
@@ -81,6 +82,10 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public List<Order> getOrders() {
+    return this.orders;
   }
 
   @Override
