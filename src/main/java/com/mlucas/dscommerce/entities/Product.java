@@ -1,6 +1,7 @@
 package com.mlucas.dscommerce.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -90,6 +91,14 @@ public class Product {
 
   public Set<Category> getCategories() {
     return this.categories;
+  }
+
+  public Set<OrderItem> getItems() {
+    return items;
+  }
+
+  public List<Order> getOrders() {
+    return items.stream().map(x -> x.getOrder()).toList();
   }
 
 }
