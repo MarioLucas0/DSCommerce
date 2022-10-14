@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.mlucas.dscommerce.dto.ProductDTO;
 import com.mlucas.dscommerce.entities.Product;
@@ -30,18 +29,35 @@ public class ProductService {
     return result.map(x -> new ProductDTO(x));
   }
 
+  @Transactional
   public ProductDTO insert(ProductDTO productDto) {
 
-    Product product = new Product();
+    Product entity = new Product();
+    copyDtoToEntity(productDto, entity);
+    entity = repository.save(entity);
+    return new ProductDTO(entity);
+  }
 
-    product.setName(productDto.getName());
-    product.setDescription(productDto.getDescription());
-    product.setPrice(productDto.getPrice());
-    product.setImgUrl(productDto.getImgUrl());
+  @Transactional
+  public ProductDTO update(ProductDTO productDto, Long id) {
 
-    product = repository.save(product);
+    Product entity = repository.getReferenceById(id);
+    copyDtoToEntity(productDto, entity);
+    entity = repository.save(entity);
+    return new ProductDTO(entity);
+  }
 
-    return new ProductDTO(product);
+  @Transactional
+  public void deleteById(Long id) {
+    repository.deleteById(id);
+  }
+
+  private void copyDtoToEntity(ProductDTO productDto, Product entity) {
+
+    entity.setName(productDto.getName());
+    entity.setDescription(productDto.getDescription());
+    entity.setPrice(productDto.getPrice());
+    entity.setImgUrl(productDto.getImgUrl());
   }
 
 }
